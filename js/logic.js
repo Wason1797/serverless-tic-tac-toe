@@ -1,5 +1,5 @@
 const columns = [
-  [1, 3, 7],
+  [1, 4, 7],
   [2, 5, 8],
   [0, 3, 6]
 ];
@@ -34,7 +34,7 @@ const checkWinCondition = game => {
   for (let position of gamePositions) {
     const positionValue = position
       .map(index => game[index])
-      .reduce((prevPos, nextPos) => prevPos + nextPos);
+      .reduce((prevPos, nextPos) => prevPos + nextPos, 0);
     if (positionValue === 3) {
       return "Machine Wins";
     } else if (positionValue === -3) {
@@ -45,24 +45,32 @@ const checkWinCondition = game => {
 };
 
 const checkAlmostWinCondition = game => {
+  const almostWinOptions = new Map();
   for (let position of gamePositions) {
     const mappedPositionValue = position.map(index => game[index]);
     const positionValue = mappedPositionValue.reduce(
-      (prevPos, nextPos) => prevPos + nextPos
+      (prevPos, nextPos) => prevPos + nextPos,
+      0
     );
     if (positionValue === 2 || positionValue === -2) {
       for (let index of position) {
         if (game[index] === 0) {
-          return index;
+          const key = positionValue === 2 ? "machine" : "player";
+          almostWinOptions.set(key, index);
         }
       }
     }
+  }
+  if (almostWinOptions.has("machine")) {
+    return almostWinOptions.get("machine");
+  } else if (almostWinOptions.has("player")) {
+    return almostWinOptions.get("player");
   }
   return false;
 };
 
 const getNextMove = (isFirst, game) => {
-  // Check win condition
+  // Check almost win condition
   const empty = getEmptyGamePositions(game);
   const almostWinCondition = checkAlmostWinCondition(game);
 
@@ -79,5 +87,12 @@ const getNextMove = (isFirst, game) => {
         }
       }
     }
+  }
+};
+
+const checkTie = usedPositions => {
+  if (usedPositions.size === 9) {
+    console.log("Tie");
+    clearInterval(intervalId);
   }
 };

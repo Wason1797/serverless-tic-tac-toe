@@ -4,11 +4,11 @@ const emptyTile = "/img/deleted.png";
 const tileTemplate = document.querySelector("#game-tile-template").innerHTML;
 const gameSpace = document.querySelector("#game-space");
 
-const game = [0, 0, 0, 0, 0, 0, 0, 0];
+const game = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 const usedPositions = new Set();
 
-let isPlayerTurn = true;
+let isPlayerTurn = false;
 const isMachineFirst = !isPlayerTurn;
 
 const renderTile = (parentId, tilePath) => {
@@ -19,13 +19,10 @@ const renderTile = (parentId, tilePath) => {
 };
 
 const clickTile = event => {
-  const parentId = event.target.parentNode.id;
+  const parentId = Number.parseInt(event.target.parentNode.id);
   if (parentId !== "game-space") {
     if (!usedPositions.has(parentId) && isPlayerTurn) {
-      renderTile(parentId, playerTilePath);
-      usedPositions.add(parentId);
-      game[parentId] = -1;
-      isPlayerTurn = false;
+      playerPlay(parentId, game);
     }
   }
 };
@@ -46,31 +43,40 @@ const renderGameBoard = () => {
   }
 };
 
+
+
+const machinePlay = game => {
+  const nextMove = getNextMove(isMachineFirst, game);
+  renderTile(nextMove, machineTilePath);
+  usedPositions.add(nextMove);
+  game[nextMove] = 1;  
+  const winCondition = checkWinCondition(game);
+  if (winCondition) {
+    console.log(winCondition);
+    clearInterval(intervalId);
+  } else {
+    isPlayerTurn = true;
+    checkTie(usedPositions);
+  }
+};
+
+const playerPlay = (parentId, game) => {
+  renderTile(parentId, playerTilePath);
+  usedPositions.add(parentId);
+  game[parentId] = -1;
+  const winCondition = checkWinCondition(game);
+  if (winCondition) {
+    console.log(winCondition);
+    clearInterval(intervalId);
+  } else {
+    isPlayerTurn = false;
+    checkTie(usedPositions);
+  }
+};
+
 const evaluateGame = () => {
   if (!isPlayerTurn) {
-    let winCondition = checkWinCondition(game);
-    if (!winCondition) {
-      const nextMove = getNextMove(isMachineFirst, game);
-      if (Number.isInteger(nextMove)) {
-        renderTile(nextMove, machineTilePath);
-        usedPositions.add(nextMove);
-        game[nextMove] = 1;
-        isPlayerTurn = true;
-      }
-      winCondition = checkWinCondition(game);
-      if (winCondition) {
-        console.log(winCondition);
-        clearInterval(intervalId);
-        isPlayerTurn = false;
-      }
-    } else {
-      console.log(winCondition);
-      clearInterval(intervalId);
-    }
-    if (usedPositions.size === 9) {
-      console.log("Tie");
-      clearInterval(intervalId);
-    }
+    machinePlay(game);
   }
 };
 
