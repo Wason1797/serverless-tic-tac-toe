@@ -1,0 +1,41 @@
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    line-height: normal;
+  }
+  
+  header {
+    background: #f4f4f4;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 255px;
+    align-content: space-between;
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+  
+  .game-tile {
+    width: inherit;
+    height: inherit;
+  }
+  
+  .game-tile-container {
+    width: 75px;
+    height: 75px;
+    position: relative;
+    display: block;
+    overflow: hidden;
+    margin: 0;
+    border-width: 1px;
+    margin: 1px;
+  }
+  
+  .on-hover-tile {
+    background-color: darkgrey;
+  }

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <title>Tic Tac Toe</title>
+  </head>
+  <body>
+    <header>
+      <h1>Tic Tac Toe</h1>
+    </header>
+    <section class="container" id="game-space">
+      <template id="game-tile-template">
+        <img src="{{imgPath}}" alt="Tile not found" class="game-tile" />
+      </template>
+    </section>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.1.0/mustache.js"
+      integrity="sha256-rP/7cD6sF9Rey5N+nwEgClCdovR+NIuUxWMkyqak9vU="
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="/js/logic.js"></script>
+    <script src="/js/index.js"></script>
+  </body>
+</html>
