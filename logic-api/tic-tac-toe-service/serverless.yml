@@ -1,0 +1,19 @@
+
+service: tictactoe
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: dev
+  region: us-east-1
+
+
+functions:
+  getNextMove:
+    handler: api/logic.getNextMoveService
+    memorySize: 128
+    description: Submit a game state and get the next move.
+    events:
+      - http: 
+          path: analyze-game
+          method: post

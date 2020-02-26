@@ -1,6 +1,6 @@
-const playerTilePath = "/img/budismo.svg";
-const machineTilePath = "/img/cover-tile.svg";
-const emptyTile = "/img/deleted.png";
+const playerTilePath = "/game/img/budismo.svg";
+const machineTilePath = "/game/img/cover-tile.svg";
+const emptyTile = "/game/img/deleted.png";
 const tileTemplate = document.querySelector("#game-tile-template").innerHTML;
 const gameSpace = document.querySelector("#game-space");
 
@@ -43,13 +43,24 @@ const renderGameBoard = () => {
   }
 };
 
+const getServerNextMove = (isFirst, game) => {
+  const gameUrl =
+    "";
+  fetch(gameUrl, {
+    method: "POST",
+    body: JSON.stringify({ isFirst: isFirst, game: game }),
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    }
+  })
+    .then(res => res.json())
+    .then(res => machinePlay(game, res.nextPosition));
+};
 
-
-const machinePlay = game => {
-  const nextMove = getNextMove(isMachineFirst, game);
+const machinePlay = (game, nextMove) => {
   renderTile(nextMove, machineTilePath);
   usedPositions.add(nextMove);
-  game[nextMove] = 1;  
+  game[nextMove] = 1;
   const winCondition = checkWinCondition(game);
   if (winCondition) {
     console.log(winCondition);
@@ -76,10 +87,10 @@ const playerPlay = (parentId, game) => {
 
 const evaluateGame = () => {
   if (!isPlayerTurn) {
-    machinePlay(game);
+    getServerNextMove(isMachineFirst, game);
   }
 };
 
 renderGameBoard();
 
-let intervalId = setInterval(evaluateGame, 1000);
+let intervalId = setInterval(evaluateGame, 1500);
